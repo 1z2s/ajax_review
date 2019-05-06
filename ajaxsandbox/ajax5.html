@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Ajax 5 - 请求PHP数据</title>
+</head>
+<body>
+	<button id="button2">请求所有用户</button>
+
+	<br><br>
+
+
+	<h1>所有用户</h1>
+	<div id="users"></div>
+
+	<script>
+		document.getElementById('button2').addEventListener('click',loadUsers);
+		function loadUsers(){
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET","users.php",true);
+			xhr.onload = function(){
+				if (this.status == 200) {
+					var users = JSON.parse(this.responseText);
+					var output = '';
+
+					// 遍历数组
+					for(var i in users){
+						output += 
+							'<ul>'+
+								'<li>'+users[i].id+'</li>'+
+								'<li>'+users[i].name+'</li>'+
+							'</ul>';
+						;
+					}
+					document.getElementById('users').innerHTML = output;
+				}
+			}
+
+			xhr.send();
+		}
+
+	</script>
+</body>
+</html>
