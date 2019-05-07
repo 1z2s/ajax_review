@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function ajax(obj){
+                    var p1=new Promise(function(resolve,reject){
+                     if(window.XMLHttpRequest){
+                         var xhr=new XMLHttpRequest();
+                     }
+                     else{
+                         var xhr=new ActiveXObject("microsoft","XTMLHTTP")
+                     }
+                    if(obj.method=='get'){
+                        xhr.open('get',obj.url+"?"+obj.data,true);
+                        xhr.send(null);
+                    }else if(obj.method=='post'){
+                       xhr.open('post',obj.url,true);
+                       xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+                       xhr.send(data);
+                    }
+                     xhr.onreadystatechange=function(){
+                           if(xhr.readyState==4 && xhr.status==200){
+                            //如果是json数据,就转成对象，否则直接var obj=xhr.responseText;
+                              var obj=JSON.parse(xhr.responseText);
+                                   console.log(xhr.responseText);
+                                   //实例对象 把obj传进去
+
+                                   //成功的回调用函数
+                                   resolve(xhr.responseText)
+                           }else   if(xhr.status==404){
+                                   console.log('页面未找到');
+                                   reject('4XX错误')
+                           }else if(xhr.status==500){
+                                   console.log('服务器错误');
+                                   reject('5XX的错误')
+                           }
+                    }
+                    })
+                    return p1;
+                   }
+                   ajax({
+                       method:'get',
+                       async:true,
+                       url:'http://www.baidu.com',
+                       data:'name=zs=男'
+
+                   }).then(function(data){
+                       console.log(data);
+                   }).catch(function(err){
+                       console.log(err);
+                  })
+
+
+                        //JSONP跨域技术
+                        <script>
+                        function fn(data){
+                            console.log(data);
+                        }
+
+                        </script>
+                      <!-- 方法一 -->
+                      <script src="https://api.douban.com/v2/book/search?q=javascript&count=1&callback=fn"></script>
+                        <script>
+                          //方法二
+                            var sc=document.createElement("script");
+                                sc.src="https://api.douban.com/v2/book/search?q=javascript&count=1&callback=fn";
+                                document.body.appendChild(sc);
+
+                        </script>
+  </script>
+</body>
+</html>
